@@ -1,0 +1,50 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+dataset = pd.read_csv('train.csv')
+
+import re
+import nltk
+nltk.download('stopwords')
+
+
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
+ps = PorterStemmer()
+data=[]
+
+for i in range(0,5971):
+        tweet=dataset["Tweet"][i]
+        tweet = re.sub('[0-9]', ' ', tweet)
+        tweet = re.sub('[.]', ' ', tweet)
+        tweet = re.sub('[,]', ' ', tweet)
+        tweet = re.sub('[?]', ' ', tweet)
+        tweet = tweet.lower()
+        tweet = tweet.split()
+        tweet = [ps.stem(word) for word in tweet if not word in set(stopwords.words('english'))]
+        tweet = ' '.join(tweet)
+        data.append(tweet)
+
+from sklearn.feature_extraction.text import CountVectorizer
+cv=CountVectorizer(max_features=1500)
+X=cv.fit_transform(data).toarray()
+y=dataset.iloc[:,1].values
+
+from sklearn.model_selection import train_test_split
+X_train,X_test,y_train,y_test=train_test_split(X, y, test_size=0.20, random_state=0)
+
+import keras
+from keras.models import Sequential
+from keras.layers import Dense
+
+model=Sequential()
+
+model.add(Dense(units=6,init='uniform',activation='relu',input_dim=1500))
+
+model.add(Dense(units=6,init='uniform',activation='relu'))
+
+model.add(Dense(units=1,init='uniform',activation='sigmoid'))
+
+model.compile(loss="binary_crossentropy",optimizer='adam',metrics=['accuracy'])
+

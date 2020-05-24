@@ -1,0 +1,39 @@
+<html>
+<title>Twitter Sentiment Analysis</title>
+<head>
+<link rel="stylesheet"type=text/css"href="{{url_for{'static',filename='style/index12.css}}}">
+
+</head>
+<body class="body1">
+<form method="POST">
+  <div class="container">
+     <h1 align='center' style="color:blck:font-size:40px">Twitter Sentiment Analysis</h1>
+     <p align='center'style="font-size:25px">Type your tweet here</p>
+     <form action='/predict' method="post">
+     <p align="center"><input type="text" align="Center" placeholder="Enter the tweet" name="tweet" id="rcorners1" required> </p>
+     <button class="button5" type="submit" name="predict" align='center' value="Predict"><font size="4">predict</font></button>
+     <div class="row">
+          {{ypred}}
+     </div>
+     </form>
+     <p>
+       {% if ypred=="Positive Tweet" %}
+                <p>Positive</p>
+                   <img src="/static/1.jpg",alt="Positive" class="tab3">
+       {%else%}
+       {% if ypred=="Negative Tweet" %}
+                <p>Negative</p>
+                   <img src="/static/2.png",alt="Negative" class="tab3">
+       {%else%}
+		   <img src="/static/3.png",alt="Emotion" class="tab3">	
+       {%endif%} {%endif%}
+     </p>
+   </div>
+</form>
+
+
+
+
+
+
+

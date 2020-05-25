@@ -1,0 +1,47 @@
+
+From flask import Flask,request,render_template,url_for 
+From keras.models import load_model 
+Import pickle 
+Import tensorflow as tf 
+Graph = tf.get_default_graph() 
+With open(r’CountVectorizer’,’rb’) as file: 
+    Cv = pickle.load(file) 
+    Print(“\ncv loaded\n”) 
+Cla=load_model(‘twit1.h5’) 
+ 
+ 
+Cla.compile(optimizer=”admin”,loss=’binary_crossentropy’) 
+  
+App=Flask(__name__) 
+  
+@app.route(‘/’) 
+Def index(): 
+    Return render_template(‘index.html’) 
+@app.route(‘/y_predict’,methods=[‘GET’,’POST’]) 
+Def page2(): 
+If request.method==’GET’: 
+        Img_url=url_for(‘static’,filename=’style/3.jpg’) 
+        Return render_template(‘index.html’,url=img_url) 
+    If request.method==’POST’: 
+        Topic=request.form[‘tweet’] 
+        Print(“Hey”+topic) 
+        Topic=cv.transform([topic]) 
+        Print(“/n”+str(topic.shape)+”\n”) 
+        With graph.as_default(): 
+            Y_pred=cla.predict(topic) 
+            Print(“pred is”+str(y_pred)) 
+            If(y_pred>0.5): 
+                Img_url=url_for(‘static’,filename=’style/1.jpg’) 
+                Topic=”positive Tweet” 
+            Elif( y_pred<0.5): 
+ 
+ 
+                Img_url=url_for(‘static’,filename=’style/2.jpg’) 
+                Topic=”Negative Tweet” 
+            Else: 
+                Img_url=url_for(‘static’,filename=’style/3.jpg’) 
+                Topic=”Neutral Tweet” 
+                 
+If(__name__==”__main__”): 
+    App.run(debug=True)     
+ 
